@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
+import axios from "axios"
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -10,18 +11,51 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const userData = { id: 1, username, token: 'token-palsu'}
-        login(userData)
-        navigate('/dashboard')
+        try {
+            const res = await axios.post('http://localhost:8080/auth/login', { username, password })
+            const { token } = res.data
+            const decoded = parseJwt(token)
+            login({token, ...decoded})
+            syncCartToBackend(token)
+            navigate('/dashboard')
+        } catch (err) {
+            alert("Invalid username or password")
+            console.error(err)
+        }
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-            <button type="submit">Login</button>
-        </form>
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-80">
+                <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">Login</h2>
+                <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mb-4 p-2 border rounded" />
+                <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mb-6 p-2 border rounded" />
+                <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
+            </form>
+        </div>
     )
+}
+
+function parseJwt(token) {
+    const base64 = token.split('.')[1]
+    const decoded = atob(base64)
+    return JSON.parse(decoded)
+}
+
+async function syncCartToBackend(token) {
+    const cart = JSON.parse(localStorage.getItem("items") || "[]")
+
+    if (cart.length > 0) {
+        await fetch("http://localhost:8080/my/cart", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ items: cart })
+        })
+        localStorage.removeItem("items") // biar gak dobel
+    }
 }
 
 export default Login
