@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "../api/config";
 
 function CheckoutPage() {
     const { user } = useContext(AuthContext)
@@ -8,7 +9,7 @@ function CheckoutPage() {
 
     const handleCheckout = async () => {
         try {
-            const res = await fetch("http://localhost:8080/checkout", {
+            const res = await fetch(`${BASE_URL}/checkout`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -2,6 +2,7 @@
 import { useEffect, useState, useContext } from "react"
 import { useParams } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
+import BASE_URL from "../api/config"
 
 function OrderDetailPage() {
   const { user } = useContext(AuthContext)
@@ -9,7 +10,7 @@ function OrderDetailPage() {
   const [order, setOrder] = useState(null)
 
   useEffect(() => {
-    fetch(`http://localhost:8080/my/orders/${id}`, {
+    fetch(`${BASE_URL}/my/orders/${id}`, {
       headers: { Authorization: `Bearer ${user.token}` }
     })
       .then(res => res.json())

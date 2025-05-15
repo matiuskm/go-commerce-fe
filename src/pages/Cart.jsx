@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
+import BASE_URL from "../api/config";
 
 function Cart() {
     const { user } = useContext(AuthContext)
@@ -12,7 +13,7 @@ function Cart() {
     }
 
     const fetchCart = () => {
-        fetch("http://localhost:8080/my/cart", {
+        fetch(`${BASE_URL}/my/cart`, {
             headers: { Authorization: `Bearer ${user.token}` }
         })
             .then(res => res.json())
@@ -42,7 +43,7 @@ function Cart() {
             }))
         }
         try {
-            await fetch("http://localhost:8080/my/cart", {
+            await fetch(`${BASE_URL}/my/cart`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

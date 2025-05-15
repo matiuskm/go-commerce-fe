@@ -2,6 +2,7 @@ import { useContext, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import BASE_URL from "../api/config"
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -12,12 +13,12 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post('http://localhost:8080/auth/login', { username, password })
+            const res = await axios.post(`${BASE_URL}/auth/login`, { username, password })
             const { token } = res.data
             const decoded = parseJwt(token)
             login({token, ...decoded})
             syncCartToBackend(token)
-            navigate('/dashboard')
+            navigate('/')
         } catch (err) {
             alert("Invalid username or password")
             console.error(err)
@@ -46,7 +47,7 @@ async function syncCartToBackend(token) {
     const cart = JSON.parse(localStorage.getItem("items") || "[]")
 
     if (cart.length > 0) {
-        await fetch("http://localhost:8080/my/cart", {
+        await fetch(`${BASE_URL}/my/cart`, {
             method: "POST",
             headers: {
             "Content-Type": "application/json",

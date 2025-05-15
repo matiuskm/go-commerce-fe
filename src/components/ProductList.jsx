@@ -1,6 +1,7 @@
 // src/components/ProductList.jsx
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
+import BASE_URL from "../api/config"
 
 function ProductList() {
     const CART_KEY = "items"
@@ -9,7 +10,7 @@ function ProductList() {
     const [cart, setCart] = useState([])
 
     useEffect(() => {
-        fetch("http://localhost:8080/products")
+        fetch(`${BASE_URL}/products`)
             .then(res => res.json())
             .then(data => setProducts(data.products || []))
             .catch(err => console.error("Failed to fetch products:", err))
@@ -17,7 +18,7 @@ function ProductList() {
 
     useEffect(() => {
         if (user) {
-            fetch("http://localhost:8080/my/cart", {
+            fetch(`${BASE_URL}/my/cart`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             })
                 .then(res => res.json())
@@ -48,7 +49,7 @@ function ProductList() {
                 }))
             }
             try {
-                await fetch("http://localhost:8080/my/cart", {
+                await fetch(`${BASE_URL}/my/cart`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

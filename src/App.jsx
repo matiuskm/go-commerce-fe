@@ -12,6 +12,9 @@ import MyOrdersPage from "./pages/MyOrders";
 import OrderDetailPage from "./pages/OrderDetail";
 import AdminRoute from "./components/AdminRoute";
 import AdminOrdersPage from "./pages/AdminOrders";
+import AdminOrderDetailPage from "./pages/AdminOrderDetail";
+import AdminProductsPage from "./pages/AdminProducts";
+import AdminProductForm from "./pages/AdminProductForm";
 
 function App() {
   return (
@@ -29,6 +32,10 @@ function App() {
         <Route path='/dashboard' element={<ProtectedRoute><DashboardUser /></ProtectedRoute>} />
 
         <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
+        <Route path="/admin/orders/:id" element={<AdminRoute><AdminOrderDetailPage /></AdminRoute>} />
+        <Route path="/admin/products" element={<AdminRoute><AdminProductsPage /></AdminRoute>} />
+        <Route path="/admin/products/new" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
+        <Route path="/admin/products/:id" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
       </Routes>
     </AuthProvider>
   )

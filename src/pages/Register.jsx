@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import BASE_URL from "../api/config";
 
 const Register = () => {
   const [name, setName] = useState('')
@@ -14,7 +15,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('http://localhost:8080/auth/register', { name, username, email, password })
+      const res = await axios.post(`${BASE_URL}/auth/register`, { name, username, email, password })
       const { token } = res.data
       const decoded = parseJwt(token)
       login({token, ...decoded})
@@ -51,7 +52,7 @@ async function syncCartToBackend(token) {
   const cart = JSON.parse(localStorage.getItem("items") || "[]")
 
   if (cart.length > 0) {
-      await fetch("http://localhost:8080/my/cart", {
+      await fetch(`${BASE_URL}/my/cart`, {
           method: "POST",
           headers: {
           "Content-Type": "application/json",
