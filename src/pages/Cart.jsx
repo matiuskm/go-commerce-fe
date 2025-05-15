@@ -64,8 +64,11 @@ function Cart() {
     }
 
     const handleQtyChange = (productId, newQty) => {
-        if (newQty <= 0) handleRemove(productId)
-            
+        if (newQty <= 0) {
+            handleRemove(productId)
+            return
+        }
+
         const updated = items.map(item => {
             const id = item.product?.id || item.ProductID
             if (id === productId) {

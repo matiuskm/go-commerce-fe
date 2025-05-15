@@ -25,7 +25,6 @@ function ProductList() {
                 .then(data => {
                     const raw = data.cart?.items || []
                     const normalized = raw.map(item => {
-                        console.log('item', item) // Add this line for debugging
                         return {
                         productId: Number(item.product?.id),
                         quantity: item.quantity
@@ -86,8 +85,6 @@ function ProductList() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
             {products.map(product => {
                 const qty = getQty(product.ID)
-                console.log('product', product)
-                console.log(qty)
                 return (
                     <div key={product.ID} className="border p-4 rounded shadow">
                         <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
