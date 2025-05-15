@@ -31,10 +31,9 @@ const Login = () => {
                 <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">Login</h2>
                 <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full mb-4 p-2 border rounded" />
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mb-6 p-2 border rounded" />
-                <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
-            </form>
-
-            <p>Belum punya akun? Bikin akun dulu <Link to={"/register"} className="text-blue-600 hover:underline">disini</Link></p>
+                <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 mb-4">Login</button>
+                <p>Belum punya akun? Bikin akun dulu <Link to={"/register"} className="text-blue-600 hover:underline">disini</Link></p>
+            </form>            
         </div>
     )
 }

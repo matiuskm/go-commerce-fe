@@ -36,9 +36,9 @@ const Register = () => {
         <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" className="w-full mb-4 p-2 border rounded"/>
         <input value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" className="w-full mb-4 p-2 border rounded"/>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full mb-6 p-2 border rounded"/>
-        <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Register</button>
+        <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 mb-4">Register</button>
+        <p>Sudah punya akun? Langsung <Link to={"/login"} className="text-blue-600 hover:underline">login</Link> aja.</p>
       </form>
-      <p>Sudah punya akun? Langsung <Link to={"/login"} className="text-blue-600 hover:underline">login</Link> aja.</p>
     </div>
   )
 }
