@@ -18,9 +18,12 @@ function Cart() {
         })
             .then(res => res.json())
             .then(data => {
-                const fetchedItems = data.cart?.items || []
-                setItems(fetchedItems)
-                setTotal(calculateTotal(fetchedItems))
+                const normalized = data.cart.items.map(item => ({
+                    productId: item.product?.id || item.ProductID,
+                    quantity: item.quantity
+                  }))
+                setItems(normalized)
+                setTotal(calculateTotal(normalized))
             })
             .catch(err => console.error("Failed to fetch cart:", err))
     }
@@ -57,7 +60,7 @@ function Cart() {
     }
 
     const handleRemove = (productId) => {
-        const updated = items.filter(item => (item.product?.id || item.ProductID) !== productId)
+        const updated = items.filter(item => (item.product?.id || item.productId) !== productId)
         setItems(updated)
         setTotal(calculateTotal(updated))
         syncCartToBackend(updated)
@@ -70,7 +73,7 @@ function Cart() {
         }
 
         const updated = items.map(item => {
-            const id = item.product?.id || item.ProductID
+            const id = item.product?.id || item.productId
             if (id === productId) {
                 return { ...item, quantity: newQty }
             }
