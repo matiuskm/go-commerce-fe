@@ -60,6 +60,8 @@ function Cart() {
     }
 
     const handleRemove = (productId) => {
+        console.log("Removing ID:", productId)
+        console.log("Items:", items.map(i => i.product?.id || i.ProductID))
         const updated = items.filter(item => (item.product?.id || item.productId) !== productId)
         setItems(updated)
         setTotal(calculateTotal(updated))
