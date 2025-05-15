@@ -15,6 +15,7 @@ import AdminOrdersPage from "./pages/AdminOrders";
 import AdminOrderDetailPage from "./pages/AdminOrderDetail";
 import AdminProductsPage from "./pages/AdminProducts";
 import AdminProductForm from "./pages/AdminProductForm";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/admin/products/new" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
         <Route path="/admin/products/:id" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
       </Routes>
+      <Footer />
     </AuthProvider>
   )
 }
