@@ -4,10 +4,10 @@ import { Navigate } from "react-router-dom"
 
 const ProtectedRoute = ({ children }) => {
     const { user } = useContext(AuthContext)
-    if (!user || !user.token) {
-        return <Navigate to="/login" replace />
+    if (user === null) {
+        return <div className="p-6">Loading...</div>
     }
-    return children
+    return user?.token ? children : <Navigate to="/login" replace />
 }
 
 export default ProtectedRoute

@@ -8,6 +8,10 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Header from "./components/Header";
 import Cart from "./pages/Cart";
 import CheckoutPage from "./pages/Checkout";
+import MyOrdersPage from "./pages/MyOrders";
+import OrderDetailPage from "./pages/OrderDetail";
+import AdminRoute from "./components/AdminRoute";
+import AdminOrdersPage from "./pages/AdminOrders";
 
 function App() {
   return (
@@ -19,8 +23,12 @@ function App() {
         <Route path='/register' element={<Register />} />
 
         <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+        <Route path='/my/orders' element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
+        <Route path='/my/orders/:id' element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
         <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         <Route path='/dashboard' element={<ProtectedRoute><DashboardUser /></ProtectedRoute>} />
+
+        <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
       </Routes>
     </AuthProvider>
   )

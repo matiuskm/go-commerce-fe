@@ -16,7 +16,8 @@ function CheckoutPage() {
                 },
             })
             const data = await res.json()
-            alert(`Checkout successful! Your order number is: ${data.order.orderNum}`)
+            console.log("Checkout successful:", data)
+            alert(`Checkout successful! Your order number is: ${data.order}`)
             navigate("/my/orders")
         } catch (err) {
             console.log("Failed to checkout:", err)
