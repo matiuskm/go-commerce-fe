@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import BASE_URL from "../api/config";
@@ -38,6 +38,7 @@ const Register = () => {
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" className="w-full mb-6 p-2 border rounded"/>
         <button type="submit" className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Register</button>
       </form>
+      <p>Sudah punya akun? Langsung <Link to={"/login"} className="text-blue-600 hover:underline">login</Link> aja.</p>
     </div>
   )
 }

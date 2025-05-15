@@ -1,6 +1,6 @@
 import { useContext, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import BASE_URL from "../api/config"
 
@@ -33,6 +33,8 @@ const Login = () => {
                 <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full mb-6 p-2 border rounded" />
                 <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
             </form>
+
+            <p>Belum punya akun? Bikin akun dulu <Link to={"/register"} className="text-blue-600 hover:underline">disini</Link></p>
         </div>
     )
 }
