@@ -18,12 +18,9 @@ function Cart() {
         })
             .then(res => res.json())
             .then(data => {
-                const normalized = data.cart.items.map(item => ({
-                    productId: item.product?.id || item.ProductID,
-                    quantity: item.quantity
-                  }))
-                setItems(normalized)
-                setTotal(calculateTotal(normalized))
+                const raw = data.cart?.items || []
+                setItems(raw)
+                setTotal(calculateTotal(raw))
             })
             .catch(err => console.error("Failed to fetch cart:", err))
     }
@@ -60,8 +57,6 @@ function Cart() {
     }
 
     const handleRemove = (productId) => {
-        console.log("Removing ID:", productId)
-        console.log("Items:", items.map(i => i.product?.id || i.ProductID))
         const updated = items.filter(item => (item.product?.id || item.productId) !== productId)
         setItems(updated)
         setTotal(calculateTotal(updated))
@@ -95,13 +90,14 @@ function Cart() {
             ) : (
                 <div className="space-y-4">
                     {items.map((item, i) => {
+                        console.log("Item:", item)
                         const qty = Number(item.quantity ?? item.Qty ?? 1)
-                        const productId = item.ProductID ?? item.product?.id
+                        const productId = item.productId ?? item.product?.id
                         return (
                             <div key={i} className="border p-4 rounded shadow">
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <h2 className="text-lg font-semibold">{item.product?.name || `Product #${item.ProductID}`}</h2>
+                                        <h2 className="text-lg font-semibold">{item.product?.name || `Product #${item.productId}`}</h2>
                                         <div className="flex items-center gap-2 mt-2">
                                             <button
                                                 onClick={() => handleQtyChange(productId, qty - 1)}
@@ -122,7 +118,7 @@ function Cart() {
                                         </p>
                                     </div>
                                     <button
-                                        onClick={() => handleRemove(item.product?.id || item.ProductID)}
+                                        onClick={() => handleRemove(item.product?.id || item.productId)}
                                         className="text-red-600 hover:underline"
                                     >
                                         Remove
