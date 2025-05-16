@@ -26,9 +26,10 @@ function ProductList() {
                     const raw = data.cart?.items || []
                     const normalized = raw.map(item => {
                         return {
-                        productId: Number(item.product?.id),
-                        quantity: item.quantity
-                    }})
+                            productId: Number(item.product?.id),
+                            quantity: item.quantity
+                        }
+                    })
                     setCart(normalized)
                 })
                 .catch(err => console.error("Failed to fetch cart:", err))
@@ -87,6 +88,11 @@ function ProductList() {
                 const qty = getQty(product.ID)
                 return (
                     <div key={product.ID} className="border p-4 rounded shadow">
+                        <img
+                            src={product.image_url ? `${BASE_URL}/${product.image_url}` : "https://placehold.co/500x500"}
+                            alt={product.name}
+                            className="w-full h-40 object-cover rounded mb-2"
+                        />
                         <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
                         <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
                         <p className="font-bold text-green-600 mt-1">Rp {Number(product.price).toLocaleString()}</p>

@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import BASE_URL from "../api/config";
+import UploadImageButton from "../components/UploadImageButton";
 
 function AdminProductsPage() {
     const { user } = useContext(AuthContext)
@@ -52,6 +53,7 @@ function AdminProductsPage() {
                 <table className="w-full border mt-4">
                     <thead className="bg-gray-100">
                         <tr>
+                            <th className="px-3 py-2 text-left"></th>
                             <th className="px-3 py-2 text-left">Name</th>
                             <th className="px-3 py-2 text-left">Price</th>
                             <th className="px-3 py-2 text-left">Stock</th>
@@ -61,6 +63,20 @@ function AdminProductsPage() {
                     <tbody>
                         {products.map((product) => (
                             <tr key={product.ID} className="border-t">
+                                <td className="px-3 py-2">
+                                    {product.image_url ? (
+                                        <img src={`${BASE_URL}/${product.image_url}`} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                                    ) : (
+                                        <UploadImageButton
+                                            productId={product.ID}
+                                            onUploaded={(updated) => 
+                                                setProducts((prev) =>
+                                                    prev.map((p) => (p.ID === updated.id ? updated : p))
+                                                )
+                                            }
+                                        />
+                                    )}
+                                </td>
                                 <td className="px-3 py-2">{product.name}</td>
                                 <td className="px-3 py-2">Rp {Number(product.price).toLocaleString()}</td>
                                 <td className="px-3 py-2">{product.stock}</td>
