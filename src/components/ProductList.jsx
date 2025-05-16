@@ -89,7 +89,7 @@ function ProductList() {
                 return (
                     <div key={product.ID} className="border p-4 rounded shadow">
                         <img
-                            src={product.image_url ? `${BASE_URL}/${product.image_url}` : "https://placehold.co/500x500"}
+                            src={product.image_url ? `${product.image_url}` : "https://placehold.co/500x500"}
                             alt={product.name}
                             className="w-full h-40 object-cover rounded mb-2"
                         />

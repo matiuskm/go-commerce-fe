@@ -65,7 +65,7 @@ function AdminProductsPage() {
                             <tr key={product.ID} className="border-t">
                                 <td className="px-3 py-2">
                                     {product.image_url ? (
-                                        <img src={`${BASE_URL}/${product.image_url}`} alt={product.name} className="w-16 h-16 object-cover rounded" />
+                                        <img src={`${product.image_url}`} alt={product.name} className="w-16 h-16 object-cover rounded" />
                                     ) : (
                                         <UploadImageButton
                                             productId={product.ID}
