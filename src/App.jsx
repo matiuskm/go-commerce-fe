@@ -19,6 +19,7 @@ import Footer from "./components/Footer";
 import ProductDetail from "./pages/ProductDetail";
 import AdminUserListPage from "./pages/AdminUserList";
 import AdminUserDetailPage from "./pages/AdminUserDetail";
+import MyProfilePage from "./pages/MyProfile";
 
 function App() {
   return (
@@ -34,7 +35,7 @@ function App() {
         <Route path='/my/orders' element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
         <Route path='/my/orders/:id' element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
         <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
-        <Route path='/dashboard' element={<ProtectedRoute><DashboardUser /></ProtectedRoute>} />
+        <Route path='/my/profile' element={<ProtectedRoute><MyProfilePage /></ProtectedRoute>} />
 
         <Route path="/admin/users" element={<AdminRoute><AdminUserListPage /></AdminRoute>} />
         <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetailPage /></AdminRoute>} />

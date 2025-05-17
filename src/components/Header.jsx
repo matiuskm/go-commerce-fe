@@ -85,7 +85,7 @@ function Header() {
                         </>
                     ) : (
                         <>
-                            <Link to="/dashboard" className="block px-2 py-2 hover:bg-blue-500 rounded">My Profile</Link>
+                            <Link to="/my/profile" className="block px-2 py-2 hover:bg-blue-500 rounded">My Profile</Link>
                             <Link to="/my/orders" className="block px-2 py-2 hover:bg-blue-500 rounded">My Orders</Link>
                             <button onClick={handleLogout} className="w-full text-left px-2 py-2 hover:bg-blue-500 rounded">Logout</button>
                             <Link to="/cart" className="block px-2 py-2 hover:bg-blue-500 rounded flex items-center gap-2">
