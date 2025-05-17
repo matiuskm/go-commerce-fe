@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 import BASE_URL from "../api/config";
+import toast from "react-hot-toast";
 
 const Register = () => {
   const [name, setName] = useState('')
@@ -20,10 +21,10 @@ const Register = () => {
       const decoded = parseJwt(token)
       login({token, ...decoded})
       syncCartToBackend(token)
-      alert('Registration successful!')
+      toast.success('Registration successful!')
       navigate('/dashboard')
     } catch (err) {
-      alert("Registration failed: " + err.response?.data?.error || err.message)
+      toast.error("Registration failed: " + err.response?.data?.error || err.message)
       console.error(err)
     }
   }

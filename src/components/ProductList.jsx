@@ -2,6 +2,8 @@
 import { useEffect, useState, useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
 import BASE_URL from "../api/config"
+import { Link } from "react-router-dom"
+import toast from "react-hot-toast"
 
 function ProductList() {
     const CART_KEY = "items"
@@ -57,11 +59,14 @@ function ProductList() {
                     },
                     body: JSON.stringify(payload)
                 })
+                toast.success("Product added to cart!")
             } catch (err) {
+                toast.error("Failed to add product to cart")
                 console.error("Failed to sync cart", err)
             }
         } else {
             localStorage.setItem(CART_KEY, JSON.stringify(newCart))
+            toast.success("Product added to cart!")
         }
     }
 
@@ -88,12 +93,14 @@ function ProductList() {
                 const qty = getQty(product.ID)
                 return (
                     <div key={product.ID} className="border p-4 rounded shadow">
-                        <img
-                            src={product.image_url ? `${product.image_url}` : "https://placehold.co/500x500"}
-                            alt={product.name}
-                            className="w-full h-40 object-cover rounded mb-2"
-                        />
-                        <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+                        <Link to={`/products/${product.ID}`}>
+                            <img
+                                src={product.image_url ? `${product.image_url}` : "https://placehold.co/500x500"}
+                                alt={product.name}
+                                className="w-full h-40 object-cover rounded mb-2"
+                            />
+                            <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
+                        </Link>
                         <p className="text-sm text-gray-600 line-clamp-2">{product.description}</p>
                         <p className="font-bold text-green-600 mt-1">Rp {Number(product.price).toLocaleString()}</p>
 

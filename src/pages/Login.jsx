@@ -3,6 +3,7 @@ import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
 import axios from "axios"
 import BASE_URL from "../api/config"
+import toast from "react-hot-toast"
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -20,7 +21,7 @@ const Login = () => {
             syncCartToBackend(token)
             navigate('/')
         } catch (err) {
-            alert("Invalid username or password")
+            toast.error("Invalid username or password")
             console.error(err)
         }
     }

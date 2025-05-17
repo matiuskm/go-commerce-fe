@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from "../api/config";
+import toast from "react-hot-toast";
 
 function CheckoutPage() {
     const { user } = useContext(AuthContext)
@@ -18,11 +19,11 @@ function CheckoutPage() {
             })
             const data = await res.json()
             console.log("Checkout successful:", data)
-            alert(`Checkout successful! Your order number is: ${data.order}`)
+            toast.success(`Checkout successful! Your order number is: ${data.order}`)
             navigate("/my/orders")
         } catch (err) {
             console.log("Failed to checkout:", err)
-            alert("Failed to checkout. Please try again.")
+            toast.error("Failed to checkout. Please try again.")
         }
     }
 

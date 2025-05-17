@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import BASE_URL from "../api/config";
+import toast from "react-hot-toast";
 
 function Cart() {
     const { user } = useContext(AuthContext)
@@ -27,11 +28,25 @@ function Cart() {
 
     useEffect(() => {
         if (user) {
+            console.log("User cart")
             fetchCart()
         } else {
+            console.log("Guest cart")
             const guestCart = JSON.parse(localStorage.getItem("items") || "[]")
-            setItems(guestCart)
-            setTotal(calculateTotal(guestCart))
+            Promise.all(
+                guestCart.map(async (item) => {
+                  const res = await fetch(`${BASE_URL}/products/${item.productId}`)
+                  const data = await res.json()
+                  return {
+                    product: data.product,
+                    quantity: item.quantity,
+                  }
+                })
+              ).then((fullCart) => {
+                setItems(fullCart)
+                setTotal(calculateTotal(fullCart))
+              })
+              .catch((err) => console.error("Failed to fetch cart:", err))
         }
     }, [user])
 
@@ -53,6 +68,7 @@ function Cart() {
             })
         } catch (err) {
             console.error("Failed to sync cart", err)
+            toast.error("Failed to update cart")
         }
     }
 
@@ -61,6 +77,7 @@ function Cart() {
         setItems(updated)
         setTotal(calculateTotal(updated))
         syncCartToBackend(updated)
+        toast.success("Product removed from cart!")
     }
 
     const handleQtyChange = (productId, newQty) => {
@@ -90,51 +107,68 @@ function Cart() {
             ) : (
                 <div className="space-y-4">
                     {items.map((item, i) => {
-                        console.log("Item:", item)
                         const qty = Number(item.quantity ?? item.Qty ?? 1)
                         const productId = item.productId ?? item.product?.id
                         return (
-                            <div key={i} className="border p-4 rounded shadow">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <h2 className="text-lg font-semibold">{item.product?.name || `Product #${item.productId}`}</h2>
-                                        <div className="flex items-center gap-2 mt-2">
-                                            <button
-                                                onClick={() => handleQtyChange(productId, qty - 1)}
-                                                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                                            >
-                                                -
-                                            </button>
-                                            <span className="px-3 font-medium">{qty}</span>
-                                            <button
-                                                onClick={() => handleQtyChange(productId, qty + 1)}
-                                                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
-                                            >
-                                                +
-                                            </button>
+                            <div key={i} className="flex gap-4 border p-4 rounded shadow">
+                                {item.product?.image_url && (
+                                    <img
+                                        src={item.product.image_url}
+                                        alt={item.product?.name}
+                                        className="w-24 h-24 object-cover rounded"
+                                    />
+                                )}
+
+                                <div className="flex-1">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <h2 className="text-lg font-semibold">
+                                                {item.product?.name || `Product #${item.productId}`}
+                                            </h2>
+                                            <p className="text-green-600 font-bold mt-1">
+                                                Rp {(item.product?.price || item.price || 0).toLocaleString()}
+                                            </p>
                                         </div>
-                                        <p className="text-green-600 font-bold">
-                                            Rp {(item.product?.price || item.price || 0).toLocaleString()}
-                                        </p>
+
+                                        <button
+                                            onClick={() => handleRemove(item.product?.id || item.productId)}
+                                            className="text-red-600 hover:underline"
+                                        >
+                                            Remove
+                                        </button>
                                     </div>
-                                    <button
-                                        onClick={() => handleRemove(item.product?.id || item.productId)}
-                                        className="text-red-600 hover:underline"
-                                    >
-                                        Remove
-                                    </button>
+
+                                    <div className="flex items-center gap-2 mt-3">
+                                        <button
+                                            onClick={() => handleQtyChange(productId, qty - 1)}
+                                            className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                                        >
+                                            -
+                                        </button>
+                                        <span className="px-3 font-medium">{qty}</span>
+                                        <button
+                                            onClick={() => handleQtyChange(productId, qty + 1)}
+                                            className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+                                        >
+                                            +
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         )
                     })}
                     <div className="text-right mt-4">
                         <p className="text-xl font-semibold">Total: Rp {total.toLocaleString()}</p>
-                        <Link
-                            to="/checkout"
-                            className="inline-block mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-                        >
-                            Proceed to Checkout
-                        </Link>
+                        {user ? (
+                            <Link to="/checkout" className="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+                                Proceed to Checkout
+                            </Link>
+                        ) : (
+                            <p className="text-center text-sm text-red-600 font-medium">
+                                Silakan <Link to="/login" className="underline text-blue-600">login</Link> atau{" "}
+                                <Link to="/register" className="underline text-blue-600">register</Link> untuk melanjutkan checkout.
+                            </p>
+                        )}
                     </div>
                 </div>
             )}

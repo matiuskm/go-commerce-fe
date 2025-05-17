@@ -27,10 +27,17 @@ function Header() {
                         </div>
                     )}
                     {!user ? (
+                        <>
                         <div className="space-x-4">
                             <Link to="/login" className="hover:underline">Login</Link>
                             <Link to="/register" className="hover:underline">Register</Link>
                         </div>
+                        <Link to="/cart" className="hover:text-gray-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437m0 0L6.75 12.75m0 0h10.5m-10.5 0L5.106 5.272m12.144 7.478L18.75 6H6.75m12 6.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm-9 1.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+                                </svg>
+                            </Link>
+                        </>
                     ) : (
                         <>
                             <div className="relative group">

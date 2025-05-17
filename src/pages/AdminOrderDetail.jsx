@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from "react"
 import { useParams } from "react-router-dom"
 import { AuthContext } from "../context/AuthContext"
 import BASE_URL from "../api/config"
+import toast from "react-hot-toast"
 
 function AdminOrderDetailPage() {
   const { user } = useContext(AuthContext)
@@ -37,9 +38,9 @@ function AdminOrderDetailPage() {
         },
         body: JSON.stringify({ status })
       })
-      alert("Order status updated!")
+      toast.success("Order status updated!")
     } catch (err) {
-      console.error("Failed to update order status", err)
+      toast.error("Failed to update order status", err)
     }
   }
 
@@ -78,13 +79,27 @@ function AdminOrderDetailPage() {
         {order.items.map((item, idx) => {
           const subtotal = item.quantity * item.product.price
           return (
-            <li key={idx} className="border p-3 rounded">
-              <p className="font-medium">{item.product.name}</p>
-              <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-              <p className="text-sm text-green-600">Price: Rp {item.product.price.toLocaleString()}</p>
-              <div className="flex justify-between mt-2">
-                <p className="text-sm font-semibold">Subtotal</p>
-                <p className="text-sm font-semibold">Rp {subtotal.toLocaleString()}</p>
+            <li key={idx} className="flex gap-4 border p-4 rounded shadow">
+              {item.product?.image_url && (
+                <img
+                  src={item.product.image_url}
+                  alt={item.product.name}
+                  className="w-20 h-20 object-cover rounded"
+                />
+              )}
+
+              <div className="flex-1">
+                <p className="font-medium">{item.product.name}</p>
+                <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                <p className="text-sm text-green-600">
+                  Price: Rp {item.product.price.toLocaleString()}
+                </p>
+                <div className="flex justify-between mt-2">
+                  <span className="text-sm font-semibold text-gray-700">Subtotal</span>
+                  <span className="text-sm font-semibold">
+                    Rp {(item.quantity * item.product.price).toLocaleString()}
+                  </span>
+                </div>
               </div>
             </li>
           )

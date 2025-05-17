@@ -1,6 +1,7 @@
 import { useContext, useRef } from "react"
 import BASE_URL from "../api/config"
 import { AuthContext } from "../context/AuthContext"
+import toast from "react-hot-toast"
 
 function UploadImageButton({ productId, onUploaded }) {
     const { user } = useContext(AuthContext)
@@ -31,11 +32,11 @@ function UploadImageButton({ productId, onUploaded }) {
         const { product: updatedProduct } = await prodRes.json()
         onUploaded?.(updatedProduct)
       } else {
-        alert("Failed to upload image")
+        toast.error("Failed to upload image")
       }
     } catch (err) {
       console.error(err)
-      alert("Upload error")
+      toast.error("Upload error")
     }
   }
 

@@ -16,6 +16,7 @@ import AdminOrderDetailPage from "./pages/AdminOrderDetail";
 import AdminProductsPage from "./pages/AdminProducts";
 import AdminProductForm from "./pages/AdminProductForm";
 import Footer from "./components/Footer";
+import ProductDetail from "./pages/ProductDetail";
 
 function App() {
   return (
@@ -25,8 +26,9 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/products/:id' element={<ProductDetail />} />
 
-        <Route path='/cart' element={<ProtectedRoute><Cart /></ProtectedRoute>} />
+        <Route path='/cart' element={<Cart />} />
         <Route path='/my/orders' element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
         <Route path='/my/orders/:id' element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
         <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
