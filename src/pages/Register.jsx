@@ -22,7 +22,7 @@ const Register = () => {
       login({token, ...decoded})
       syncCartToBackend(token)
       toast.success('Registration successful!')
-      navigate('/dashboard')
+      navigate('/')
     } catch (err) {
       toast.error("Registration failed: " + err.response?.data?.error || err.message)
       console.error(err)
