@@ -97,7 +97,7 @@ function ProductList() {
                             <img
                                 src={product.image_url ? `${product.image_url}` : "https://placehold.co/500x500"}
                                 alt={product.name}
-                                className="w-full h-40 object-cover rounded mb-2"
+                                className="w-full h-40 object-cover rounded-xl mb-2"
                             />
                             <h2 className="text-lg font-semibold text-gray-800">{product.name}</h2>
                         </Link>

@@ -17,6 +17,8 @@ import AdminProductsPage from "./pages/AdminProducts";
 import AdminProductForm from "./pages/AdminProductForm";
 import Footer from "./components/Footer";
 import ProductDetail from "./pages/ProductDetail";
+import AdminUserListPage from "./pages/AdminUserList";
+import AdminUserDetailPage from "./pages/AdminUserDetail";
 
 function App() {
   return (
@@ -34,6 +36,8 @@ function App() {
         <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
         <Route path='/dashboard' element={<ProtectedRoute><DashboardUser /></ProtectedRoute>} />
 
+        <Route path="/admin/users" element={<AdminRoute><AdminUserListPage /></AdminRoute>} />
+        <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetailPage /></AdminRoute>} />
         <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
         <Route path="/admin/orders/:id" element={<AdminRoute><AdminOrderDetailPage /></AdminRoute>} />
         <Route path="/admin/products" element={<AdminRoute><AdminProductsPage /></AdminRoute>} />
