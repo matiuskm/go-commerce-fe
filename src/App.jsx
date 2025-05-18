@@ -25,26 +25,28 @@ function App() {
   return (
     <AuthProvider>
       <Header />
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/products/:id' element={<ProductDetail />} />
+      <main className="pb-16">
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/products/:id' element={<ProductDetail />} />
 
-        <Route path='/cart' element={<Cart />} />
-        <Route path='/my/orders' element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
-        <Route path='/my/orders/:id' element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
-        <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
-        <Route path='/my/profile' element={<ProtectedRoute><MyProfilePage /></ProtectedRoute>} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/my/orders' element={<ProtectedRoute><MyOrdersPage /></ProtectedRoute>} />
+          <Route path='/my/orders/:id' element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
+          <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path='/my/profile' element={<ProtectedRoute><MyProfilePage /></ProtectedRoute>} />
 
-        <Route path="/admin/users" element={<AdminRoute><AdminUserListPage /></AdminRoute>} />
-        <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetailPage /></AdminRoute>} />
-        <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
-        <Route path="/admin/orders/:id" element={<AdminRoute><AdminOrderDetailPage /></AdminRoute>} />
-        <Route path="/admin/products" element={<AdminRoute><AdminProductsPage /></AdminRoute>} />
-        <Route path="/admin/products/new" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
-        <Route path="/admin/products/:id" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
-      </Routes>
+          <Route path="/admin/users" element={<AdminRoute><AdminUserListPage /></AdminRoute>} />
+          <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetailPage /></AdminRoute>} />
+          <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
+          <Route path="/admin/orders/:id" element={<AdminRoute><AdminOrderDetailPage /></AdminRoute>} />
+          <Route path="/admin/products" element={<AdminRoute><AdminProductsPage /></AdminRoute>} />
+          <Route path="/admin/products/new" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
+          <Route path="/admin/products/:id" element={<AdminRoute><AdminProductForm /></AdminRoute>} />
+        </Routes>
+      </main>
       <Footer />
     </AuthProvider>
   )

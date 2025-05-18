@@ -10,12 +10,26 @@ function ProductList() {
     const { user } = useContext(AuthContext)
     const [products, setProducts] = useState([])
     const [cart, setCart] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(false)
+
+    const fetchProducts = async () => {
+        setLoading(true)
+        setError(false)
+        try {
+            const res = await fetch(`${BASE_URL}/products`)
+            const data = await res.json()
+            setProducts(data.products || [])
+        } catch (err) {
+            console.error("Failed to fetch products:", err)
+            setError(true)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     useEffect(() => {
-        fetch(`${BASE_URL}/products`)
-            .then(res => res.json())
-            .then(data => setProducts(data.products || []))
-            .catch(err => console.error("Failed to fetch products:", err))
+        fetchProducts()
     }, [])
 
     useEffect(() => {
@@ -85,6 +99,37 @@ function ProductList() {
 
     const getQty = (productId) => {
         return cart.find(item => Number(item.productId) === Number(productId))?.quantity || 0
+    }
+
+    if (loading) {
+        return (
+            <div className="p-6 text-center">
+                <p className="text-lg font-semibold mb-2">Loading katalog…</p>
+                <p className="text-sm text-gray-600 mb-4">
+                    Kalau katalog belum keluar, coba lagi setelah 1–3 menit
+                </p>
+                <button
+                    onClick={fetchProducts}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                    Muat Ulang
+                </button>
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className="p-6 text-center text-red-600">
+                <p className="mb-4">Gagal memuat katalog produk.</p>
+                <button
+                    onClick={fetchProducts}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                    Coba Lagi
+                </button>
+            </div>
+        )
     }
 
     return (
