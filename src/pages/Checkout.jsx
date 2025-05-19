@@ -96,6 +96,10 @@ function CheckoutPage() {
             })
             const data = await res.json()
             if (!res.ok) throw new Error(data.error || "Checkout gagal")
+            const { paymentUrl } = data
+            // full‐page redirect to Xendit’s checkout
+            window.location.href = paymentUrl
+
             toast.success(`Checkout successful! Your order number is: ${data.order}`)
             navigate("/my/orders")
         } catch (err) {
@@ -107,8 +111,6 @@ function CheckoutPage() {
     }
 
     if (loading) return <div className="p-6">Loading addresses…</div>
-
-    console.log("Selected address:", addresses)
 
     return (
         <div className="max-w-xl mx-auto p-6">

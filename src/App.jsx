@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import AuthProvider from "./context/AuthContext";
-import DashboardUser from "./pages/DashboardUser";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -20,6 +19,8 @@ import ProductDetail from "./pages/ProductDetail";
 import AdminUserListPage from "./pages/AdminUserList";
 import AdminUserDetailPage from "./pages/AdminUserDetail";
 import MyProfilePage from "./pages/MyProfile";
+import PaymentSuccessPage from "./pages/PaymentSuccess";
+import PaymentFailurePage from "./pages/PaymentFailed";
 
 function App() {
   return (
@@ -38,6 +39,9 @@ function App() {
             <Route path='/my/orders/:id' element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>} />
             <Route path='/checkout' element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
             <Route path='/my/profile' element={<ProtectedRoute><MyProfilePage /></ProtectedRoute>} />
+            
+            <Route path='/payment-success' element={<ProtectedRoute><PaymentSuccessPage /></ProtectedRoute>} />
+            <Route path='/payment-failed' element={<ProtectedRoute><PaymentFailurePage /></ProtectedRoute>} />
 
             <Route path="/admin/users" element={<AdminRoute><AdminUserListPage /></AdminRoute>} />
             <Route path="/admin/users/:id" element={<AdminRoute><AdminUserDetailPage /></AdminRoute>} />
