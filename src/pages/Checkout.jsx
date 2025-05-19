@@ -101,7 +101,7 @@ function CheckoutPage() {
             window.location.href = paymentUrl
 
             toast.success(`Checkout successful! Your order number is: ${data.order}`)
-            navigate("/my/orders")
+            // navigate("/my/orders")
         } catch (err) {
             console.log("Failed to checkout:", err)
             toast.error("Failed to checkout. Please try again.")
