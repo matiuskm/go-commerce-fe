@@ -10,11 +10,11 @@ function ProductList() {
   const { user } = useContext(AuthContext)
 
   // products + pagination state
-  const [products, setProducts]   = useState([])
-  const [page, setPage]           = useState(1)
-  const [hasMore, setHasMore]     = useState(true)
+  const [products, setProducts] = useState([])
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(false)
-  const [errorProducts, setErrorProducts]     = useState(false)
+  const [errorProducts, setErrorProducts] = useState(false)
 
   // cart state
   const [cart, setCart] = useState([])
@@ -26,11 +26,11 @@ function ProductList() {
     setLoadingProducts(true)
     setErrorProducts(false)
     try {
-      const res  = await fetch(`${BASE_URL}/products?page=${page}&limit=10`)
+      const res = await fetch(`${BASE_URL}/products?page=${page}&limit=10`)
       const data = await res.json()
       setProducts(prev => {
         // only add items whose id isn't already in prev
-        const newOnes = data.products.filter(item => 
+        const newOnes = data.products.filter(item =>
           !prev.some(p => p.ID === item.ID)
         )
         return [...prev, ...newOnes]
@@ -88,10 +88,12 @@ function ProductList() {
   const updateCart = async newCart => {
     setCart(newCart)
     if (user) {
-      const payload = { items: newCart.map(i => ({
-        productId: Number(i.productId),
-        quantity: i.quantity
-      })) }
+      const payload = {
+        items: newCart.map(i => ({
+          productId: Number(i.productId),
+          quantity: i.quantity
+        }))
+      }
       try {
         await fetch(`${BASE_URL}/my/cart`, {
           method: "POST",
@@ -171,11 +173,18 @@ function ProductList() {
               className="border p-4 rounded shadow"
             >
               <Link to={`/products/${product.ID}`}>
-                <img
-                  src={product.image_url || "https://placehold.co/500x500"}
-                  alt={product.name}
-                  className="w-full h-40 object-cover rounded-xl mb-2"
-                />
+                <div className="relative">
+                  <img
+                    src={product.image_url || "https://placehold.co/500x500"}
+                    alt={product.name}
+                    className={`w-full h-40 object-cover rounded-xl mb-2 transition duration-300 ${product.stock <= 0 ? "grayscale brightness-80" : ""}`}
+                  />
+                  {product.stock <= 0 && (
+                    <span className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded shadow">
+                      Out of Stock
+                    </span>
+                  )}
+                </div>
                 <h2 className="text-lg font-semibold text-gray-800">
                   {product.name}
                 </h2>
@@ -188,7 +197,9 @@ function ProductList() {
               </p>
 
               <div className="mt-4 flex items-center gap-2">
-                {qty > 0 ? (
+                {product.stock <= 0 ? (
+                  <span className="text-sm text-red-500 font-semibold">Out of stock</span>
+                ) : qty > 0 ? (
                   <>
                     <button
                       onClick={() => handleQtyChange(product.ID, qty - 1)}

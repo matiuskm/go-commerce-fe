@@ -64,12 +64,17 @@ function ProductDetail() {
             {/* Grid layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                 {/* Image */}
-                <div>
+                <div className="relative">
                     <img
                         src={product.image_url}
                         alt={product.name}
-                        className="w-full h-auto max-h-[500px] object-contain rounded-3xl"
+                        className={`w-full h-auto max-h-[500px] object-contain rounded-3xl ${product.stock <= 0 ? "grayscale brightness-80" : ""}`}
                     />
+                    {product.stock <= 0 && (
+                    <span className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded shadow">
+                      Out of Stock
+                    </span>
+                  )}
                 </div>
 
                 {/* Info panel */}
@@ -79,31 +84,36 @@ function ProductDetail() {
                     <p className="text-xl text-green-700 font-bold mb-4">
                         Rp {product.price.toLocaleString()}
                     </p>
+                    {product.stock === 0 ? (
+                        <p className="text-red-600 font-medium mb-4">Out of stock</p>
+                    ) : (
+                        <>
+                            <div className="flex items-center gap-3 mb-4">
+                                <button
+                                    onClick={() => setQty(Math.max(1, qty - 1))}
+                                    className="px-3 py-1 bg-gray-300 rounded"
+                                >
+                                    -
+                                </button>
+                                <span className="font-medium">{qty}</span>
+                                <button
+                                    onClick={() => setQty(qty + 1)}
+                                    className="px-3 py-1 bg-gray-300 rounded"
+                                >
+                                    +
+                                </button>
+                            </div>
 
-                    <div className="flex items-center gap-3 mb-4">
-                        <button
-                            onClick={() => setQty(Math.max(1, qty - 1))}
-                            className="px-3 py-1 bg-gray-300 rounded"
-                        >
-                            -
-                        </button>
-                        <span className="font-medium">{qty}</span>
-                        <button
-                            onClick={() => setQty(qty + 1)}
-                            className="px-3 py-1 bg-gray-300 rounded"
-                        >
-                            +
-                        </button>
-                    </div>
-
-                    <button
-                        disabled={!product}
-                        onClick={handleAddToCart}
-                        className={`px-5 py-2 rounded text-white ${product ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
-                            }`}
-                    >
-                        Add to Cart
-                    </button>
+                            <button
+                                disabled={!product}
+                                onClick={handleAddToCart}
+                                className={`px-5 py-2 rounded text-white ${product ? "bg-blue-600 hover:bg-blue-700" : "bg-gray-400 cursor-not-allowed"
+                                    }`}
+                            >
+                                Add to Cart
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
