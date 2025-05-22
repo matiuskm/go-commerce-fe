@@ -31,7 +31,7 @@ function CheckoutPage() {
     );
 
     const adminFee = paymentMethod === "QRIS"
-    ? Math.ceil(subtotal * ADMIN_FEE.QRIS)
+    ? Math.ceil(subtotal / (1 - ADMIN_FEE.QRIS)) - subtotal
     : ADMIN_FEE.VA;
 
     const total = subtotal + adminFee;
