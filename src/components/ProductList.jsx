@@ -184,6 +184,11 @@ function ProductList() {
                       Out of Stock
                     </span>
                   )}
+                  {product.stock > 0 && product.stock <= 5 && (
+                    <span className="absolute top-2 left-2 bg-yellow-100 text-xs px-2 py-1 rounded shadow">
+                      Sisa {product.stock} lagi
+                    </span>
+                  )}
                 </div>
                 <h2 className="text-lg font-semibold text-gray-800">
                   {product.name}

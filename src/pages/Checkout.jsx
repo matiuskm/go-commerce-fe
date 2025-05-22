@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import BASE_URL from "../api/config";
 import toast from "react-hot-toast";
 
+const ADMIN_FEE = {
+    VA: 4440,
+    QRIS: 0.007
+}
+
 function CheckoutPage() {
     const [addresses, setAddresses] = useState([])
     const [selectedAddress, setSelectedAddress] = useState(null)
@@ -18,10 +23,31 @@ function CheckoutPage() {
     const [saving, setSaving] = useState(false)
     const [placing, setPlacing] = useState(false)
     const { user } = useContext(AuthContext)
-    const navigate = useNavigate()
+    const [paymentMethod, setPaymentMethod] = useState("VA")
+    const [cartItems, setCartItems] = useState([]);
+
+    const subtotal = cartItems.reduce((sum, item) =>
+        sum + (item.product?.price || item.price || 0) * (item.Qty || item.quantity || 1), 0
+    );
+
+    const adminFee = paymentMethod === "QRIS"
+    ? Math.ceil(subtotal * ADMIN_FEE.QRIS)
+    : ADMIN_FEE.VA;
+
+    const total = subtotal + adminFee;
+
+    const fetchCart = () => {
+        fetch(`${BASE_URL}/my/cart`, {
+            headers: { Authorization: `Bearer ${user.token}` }
+        })
+            .then(res => res.json())
+            .then(data => setCartItems(data.cart?.items || []))
+            .catch(err => console.error("Failed to fetch cart:", err))
+    }
 
     // load existing addresses
     useEffect(() => {
+        fetchCart()
         fetch(`${BASE_URL}/my/addresses`, {
             headers: { Authorization: `Bearer ${user.token}` }
         })
@@ -92,7 +118,10 @@ function CheckoutPage() {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${user.token}`
                 },
-                body: JSON.stringify({ addressId: selectedAddress.id })
+                body: JSON.stringify({ 
+                    addressId: selectedAddress.id,
+                    paymentMethod
+                })
             })
             const data = await res.json()
             if (!res.ok) throw new Error(data.error || "Checkout gagal")
@@ -101,7 +130,6 @@ function CheckoutPage() {
             window.location.href = paymentUrl
 
             toast.success(`Checkout successful! Your order number is: ${data.order}`)
-            // navigate("/my/orders")
         } catch (err) {
             console.log("Failed to checkout:", err)
             toast.error("Failed to checkout. Please try again.")
@@ -194,15 +222,67 @@ function CheckoutPage() {
                 )}
             </section>
 
-            {/* Order summary & checkout */}
+            {/* Payment Method Selector */}
+            <section className="border rounded-lg p-4 mb-4">
+                <h2 className="text-lg font-medium mb-2">Metode Pembayaran</h2>
+                <div className="flex flex-col space-y-2">
+                    <label className={`flex items-center cursor-pointer rounded-lg border px-3 py-2 ${paymentMethod === "VA" ? "border-green-600 bg-green-50" : "border-gray-300"}`}>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="VA"
+                            checked={paymentMethod === "VA"}
+                            onChange={() => setPaymentMethod("VA")}
+                            className="mr-2 accent-green-600"
+                        />
+                        <div>
+                            <span className="font-semibold">Virtual Account</span>
+                        </div>
+                    </label>
+                    <label className={`flex items-center cursor-pointer rounded-lg border px-3 py-2 ${paymentMethod === "QRIS" ? "border-green-600 bg-green-50" : "border-gray-300"}`}>
+                        <input
+                            type="radio"
+                            name="payment"
+                            value="QRIS"
+                            checked={paymentMethod === "QRIS"}
+                            onChange={() => setPaymentMethod("QRIS")}
+                            className="mr-2 accent-green-600"
+                        />
+                        <div>
+                            <span className="font-semibold">QRIS</span>
+                        </div>
+                    </label>
+                </div>
+            </section>
+
+            {/* ORDER SUMMARY */}
             <section className="border rounded-lg p-4">
+                <h2 className="text-lg font-medium mb-2">Ringkasan Pesanan</h2>
+                <div className="space-y-1">
+                    <div className="flex justify-between">
+                        <span>Total Harga Produk</span>
+                        <span>Rp {subtotal.toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between">
+                        <span>
+                            Admin Fee
+                            <span title="Biaya admin tergantung metode pembayaran" className="ml-1 cursor-pointer text-gray-400">ℹ️</span>
+                        </span>
+                        <span>Rp {adminFee.toLocaleString()}</span>
+                    </div>
+                </div>
+                <hr className="my-2" />
+                <div className="flex justify-between font-bold text-lg">
+                    <span>Total Tagihan</span>
+                    <span>Rp {total.toLocaleString()}</span>
+                </div>
+
                 <button
                     onClick={handleCheckout}
                     disabled={placing}
-                    className={`w-full bg-green-600 text-white px-4 py-2 rounded ${placing ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"
-                        }`}
+                    className={`mt-4 w-full bg-green-600 text-white px-4 py-2 rounded ${placing ? "opacity-50 cursor-not-allowed" : "hover:bg-green-700"}`}
                 >
-                    {placing ? "Memproses..." : "Place Order"}
+                    {placing ? "Memproses..." : "Bayar Sekarang"}
                 </button>
             </section>
         </div>

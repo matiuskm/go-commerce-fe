@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
+import axios from "../api/axios";
 import BASE_URL from "../api/config";
 import toast from "react-hot-toast";
 
@@ -16,7 +16,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post(`${BASE_URL}/auth/register`, { name, username, email, password })
+      const res = await axios.post(`/auth/register`, { name, username, email, password })
       const { token } = res.data
       const decoded = parseJwt(token)
       login({token, ...decoded})

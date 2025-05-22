@@ -1,9 +1,9 @@
 import { useContext, useState } from "react"
 import { AuthContext } from "../context/AuthContext"
 import { Link, useNavigate } from "react-router-dom"
-import axios from "axios"
 import BASE_URL from "../api/config"
 import toast from "react-hot-toast"
+import axios from "../api/axios"
 
 const Login = () => {
     const [username, setUsername] = useState('')
@@ -14,7 +14,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post(`${BASE_URL}/auth/login`, { username, password })
+            const res = await axios.post(`/auth/login`, { username, password })
             const { token } = res.data
             const decoded = parseJwt(token)
             login({token, ...decoded})
