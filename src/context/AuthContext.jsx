@@ -5,34 +5,33 @@ import { useLocation } from "react-router-dom";
 export const AuthContext = createContext()
 
 function AuthProvider({ children }) {
-    const [user, setUser] = useState(() => {
-        const stored = localStorage.getItem("user")
-        return stored ? JSON.parse(stored) : null
-    })
+    const [user, setUser] = useState(undefined)
 
     const location = useLocation()
     
     useEffect(() => {
-        checkTokenValidity()
+        const savedUser = localStorage.getItem("user")
+        if (savedUser) {
+            const parsed = JSON.parse(savedUser)
+            const isValid = checkTokenValidity(parsed.token)
+            if (isValid) {
+                setUser(parsed)
+            } else {
+                localStorage.clear()
+                setUser(null)
+            }
+        } else {
+            setUser(null)
+        }
     }, [location.pathname])
 
-    const checkTokenValidity = () => {
-        if (!user?.token) return false
+    const checkTokenValidity = (token) => {
         try {
-            const decoded = jwtDecode(token);
-            const now = Date.now() / 1000;
-            if (decoded.exp < now) {
-                setUser(null);
-                localStorage.clear(); // bersihin token & user
-                // window.location.href = "/login"; // redirect paksa ke login
-                return false;
-            }
-            return true;
-        } catch (err) {
-            setUser(null);
-            localStorage.clear();
-            // window.location.href = "/login";
-            return false;
+            const decoded = jwtDecode(token)
+            const now = Date.now() / 1000
+            return decoded.exp >= now
+        } catch {
+            return false
         }
     }
 
@@ -56,7 +55,7 @@ function AuthProvider({ children }) {
 
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
-            {children}
+            {user === undefined ? <div>Loading...</div> : children}
         </AuthContext.Provider>
     )
 }
