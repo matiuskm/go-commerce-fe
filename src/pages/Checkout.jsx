@@ -112,24 +112,36 @@ function CheckoutPage() {
         }
         setPlacing(true)
         try {
-            const res = await fetch(`${BASE_URL}/checkout`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${user.token}`
-                },
-                body: JSON.stringify({ 
-                    addressId: selectedAddress.id,
-                    paymentMethod
-                })
-            })
-            const data = await res.json()
-            if (!res.ok) throw new Error(data.error || "Checkout gagal")
-            const { paymentUrl } = data
-            // full‐page redirect to Xendit’s checkout
-            window.location.href = paymentUrl
+            let attempt = 0
+            let res, data
 
+            while (attempt < 2) {
+                res = await fetch(`${BASE_URL}/checkout`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${user.token}`
+                    },
+                    body: JSON.stringify({ 
+                        addressId: selectedAddress.id,
+                        paymentMethod
+                    })
+                })
+                data = await res.json()
+
+                if (res.ok && data.paymentUrl) break
+
+                attempt++
+                console.warn(`Checkout attempt ${attempt} failed`, data.error || res.status)
+                await new Promise(resolve => setTimeout(resolve, 500))
+            }
+            
+            if (!res.ok || !data.paymentUrl) throw new Error(data.error || "Checkout gagal")
+
+            // full‐page redirect to Xendit’s checkout
             toast.success(`Checkout successful! Your order number is: ${data.order}`)
+            window.location.href = data.paymentUrl
+
         } catch (err) {
             console.log("Failed to checkout:", err)
             toast.error("Failed to checkout. Please try again.")

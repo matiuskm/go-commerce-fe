@@ -8,9 +8,14 @@ function AuthProvider({ children }) {
         return stored ? JSON.parse(stored) : null
     })
 
+    const location = useLocation()
+    
+    useEffect(() => {
+        checkTokenValidity()
+    }, [location.pathname])
+
     const checkTokenValidity = () => {
-        const token = localStorage.getItem('token');
-        if (!token) return false;
+        if (!user?.token) return false
         try {
             const decoded = jwt_decode(token);
             const now = Date.now() / 1000;
