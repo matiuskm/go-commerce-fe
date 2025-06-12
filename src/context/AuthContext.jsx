@@ -31,7 +31,7 @@ function AuthProvider({ children }) {
         } catch (err) {
             setUser(null);
             localStorage.clear();
-            window.location.href = "/login";
+            // window.location.href = "/login";
             return false;
         }
     }
