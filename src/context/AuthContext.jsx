@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import jwt_decode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 export const AuthContext = createContext()
 
@@ -18,7 +18,7 @@ function AuthProvider({ children }) {
     const checkTokenValidity = () => {
         if (!user?.token) return false
         try {
-            const decoded = jwt_decode(token);
+            const decoded = jwtDecode(token);
             const now = Date.now() / 1000;
             if (decoded.exp < now) {
                 setUser(null);
