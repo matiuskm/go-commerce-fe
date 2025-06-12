@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import {jwtDecode} from "jwt-decode";
+import { useLocation } from "react-router-dom";
 
 export const AuthContext = createContext()
 
@@ -23,7 +24,7 @@ function AuthProvider({ children }) {
             if (decoded.exp < now) {
                 setUser(null);
                 localStorage.clear(); // bersihin token & user
-                window.location.href = "/login"; // redirect paksa ke login
+                // window.location.href = "/login"; // redirect paksa ke login
                 return false;
             }
             return true;
